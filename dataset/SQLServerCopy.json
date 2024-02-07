@@ -1,0 +1,12 @@
+{
+	"name": "SQLServerCopy",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LocalSqlServer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	}
+}
