@@ -5,6 +5,9 @@
 			"referenceName": "AzureBlobStorage1",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "dp203"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {

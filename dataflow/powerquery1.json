@@ -2,6 +2,9 @@
 	"name": "powerquery1",
 	"properties": {
 		"type": "WranglingDataFlow",
+		"folder": {
+			"name": "dp203"
+		},
 		"typeProperties": {
 			"sources": [
 				{
