@@ -493,6 +493,217 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_Product')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/copy_all')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Look For All Tables",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "SELECT s.name as SchemaName, \nt.name as TableName\nFROM sys.tables t\ninner join sys.schemas s\non t.schema_id=s.schema_id\nwhere s.name ='SalesLT'",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "LocalSQLDBTables",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach Local Schema Table",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Look For All Tables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Look For All Tables').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy Each Table",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "@{concat('SELECT * FROM ', item().SchemaName, '.', item().TableName)}",
+												"type": "Expression"
+											},
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings",
+												"copyBehavior": "FlattenHierarchy"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "SQLServerCopy",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ParquetTable",
+											"type": "DatasetReference",
+											"parameters": {
+												"SchemaName": {
+													"value": "@item().SchemaName",
+													"type": "Expression"
+												},
+												"TableName": {
+													"value": "@item().TableName",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "de"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/LocalSQLDBTables')]",
+				"[concat(variables('factoryId'), '/datasets/SQLServerCopy')]",
+				"[concat(variables('factoryId'), '/datasets/ParquetTable')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LocalSQLDBTables')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LocalSqlServer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LocalSqlServer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQLServerCopy')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LocalSqlServer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LocalSqlServer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ParquetTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_dedatalake",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"SchemaName": {
+						"type": "string"
+					},
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@{concat(dataset().TableName, '.parquet')}",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@{concat(dataset().SchemaName, '/', dataset().TableName)}",
+							"type": "Expression"
+						},
+						"fileSystem": "bronze"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_dedatalake')]"
+			]
 		}
 	]
 }
