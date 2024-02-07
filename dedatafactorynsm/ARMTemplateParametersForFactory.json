@@ -14,6 +14,9 @@
 		"ls_dedatalake_accountKey": {
 			"value": ""
 		},
+		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"value": "0207-154258-57nijrvd"
+		},
 		"AzureKeyVault1_properties_typeProperties_baseUrl": {
 			"value": "https://dekeyvaultnsm.vault.azure.net/"
 		},

@@ -20,6 +20,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_dedatalake'"
 		},
+		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0207-154258-57nijrvd"
+		},
 		"AzureKeyVault1_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://dekeyvaultnsm.vault.azure.net/"
@@ -76,6 +80,9 @@
 					},
 					"ls_dedatalake_properties_typeProperties_url": {
 						"value": "[parameters('ls_dedatalake_properties_typeProperties_url')]"
+					},
+					"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('AzureDatabricks1_properties_typeProperties_existingClusterId')]"
 					}
 				}
 			},
