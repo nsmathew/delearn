@@ -8,6 +8,21 @@
 		"AzureBlobStorage1_connectionString": {
 			"value": ""
 		},
+		"LocalSqlServer_connectionString": {
+			"value": "Integrated Security=False;Data Source=localhost;Initial Catalog=AdventureWorksLT2017;User ID=nsmlocal"
+		},
+		"ls_dedatalake_accountKey": {
+			"value": ""
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://dekeyvaultnsm.vault.azure.net/"
+		},
+		"lnkdsrvc_dedatavault_properties_typeProperties_baseUrl": {
+			"value": "https://dekeyvaultnsm.vault.azure.net/"
+		},
+		"ls_dedatalake_properties_typeProperties_url": {
+			"value": "https://destoragensm.dfs.core.windows.net/"
+		},
 		"containerUri": {
 			"value": ""
 		},

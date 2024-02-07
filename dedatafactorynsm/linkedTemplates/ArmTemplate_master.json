@@ -11,6 +11,27 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
 		},
+		"LocalSqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LocalSqlServer'",
+			"defaultValue": "Integrated Security=False;Data Source=localhost;Initial Catalog=AdventureWorksLT2017;User ID=nsmlocal"
+		},
+		"ls_dedatalake_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_dedatalake'"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://dekeyvaultnsm.vault.azure.net/"
+		},
+		"lnkdsrvc_dedatavault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://dekeyvaultnsm.vault.azure.net/"
+		},
+		"ls_dedatalake_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://destoragensm.dfs.core.windows.net/"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -40,6 +61,21 @@
 					},
 					"AzureBlobStorage1_connectionString": {
 						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"ls_dedatalake_accountKey": {
+						"value": "[parameters('ls_dedatalake_accountKey')]"
+					},
+					"LocalSqlServer_connectionString": {
+						"value": "[parameters('LocalSqlServer_connectionString')]"
+					},
+					"AzureKeyVault1_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+					},
+					"lnkdsrvc_dedatavault_properties_typeProperties_baseUrl": {
+						"value": "[parameters('lnkdsrvc_dedatavault_properties_typeProperties_baseUrl')]"
+					},
+					"ls_dedatalake_properties_typeProperties_url": {
+						"value": "[parameters('ls_dedatalake_properties_typeProperties_url')]"
 					}
 				}
 			},
