@@ -89,6 +89,9 @@
 					"referenceName": "AzureBlobStorage1",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "dp203"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -170,6 +173,9 @@
 					"referenceName": "AzureBlobStorage1",
 					"type": "LinkedServiceReference"
 				},
+				"folder": {
+					"name": "dp203"
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -207,6 +213,9 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"type": "WranglingDataFlow",
+				"folder": {
+					"name": "dp203"
+				},
 				"typeProperties": {
 					"sources": [
 						{
