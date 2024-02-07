@@ -3,8 +3,8 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Data flow1",
-				"type": "ExecuteDataFlow",
+				"name": "powerquery1",
+				"type": "ExecuteWranglingDataflow",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -15,11 +15,29 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"dataflow": {
+						"referenceName": "powerquery1",
+						"type": "DataFlowReference"
+					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
 					},
-					"traceLevel": "Fine"
+					"queries": [
+						{
+							"queryName": "UserQuery",
+							"dataflowSinks": [
+								{
+									"name": "UserQueryDelimitedText1",
+									"dataset": {
+										"referenceName": "ds_ProductWrangled",
+										"type": "DatasetReference"
+									},
+									"script": "sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['ProductWrangled.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> UserQueryDelimitedText1"
+								}
+							]
+						}
+					]
 				}
 			}
 		],
